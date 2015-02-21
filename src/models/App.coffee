@@ -3,6 +3,7 @@
 class window.App extends Backbone.Model
   initialize: ->
     @set 'deck', deck = new Deck()
+    @set 'maxCards', deck.length
     @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
 
@@ -18,6 +19,7 @@ class window.App extends Backbone.Model
       while dealer.score() < 17
         dealer.hit()
       if dealer.score() <= 21
+
         if player.score() > dealer.score()
           @trigger 'playerWin', @
         else if player.score() is dealer.score()
@@ -31,7 +33,7 @@ class window.App extends Backbone.Model
     @get('dealerHand').on 'lose', =>
       @trigger 'playerWin', @
 
-  reShuffle: ->
+  reDeal: ->
     deck = @get 'deck'
     dealer = @get('dealerHand')
     player = @get('playerHand')
@@ -40,3 +42,8 @@ class window.App extends Backbone.Model
     # Instead, we empty their hands and deal
     player.reset().add([deck.pop(), deck.pop()])
     dealer.reset().add([deck.pop().flip(), deck.pop()])
+
+  shuffle: ->
+    deck = @get 'deck'
+    if deck.length < @get('maxCards') * 0.25
+      deck.reset(_.shuffle(deck.createDecks(4)))

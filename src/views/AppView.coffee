@@ -12,17 +12,17 @@ class window.AppView extends Backbone.View
   initialize: ->
     @model.on 'playerWin', =>
       alert 'You win!'
-      @model.reShuffle()
+      @model.reDeal()
       @render()
       return
     @model.on 'dealerWin', =>
       alert 'You lose!'
-      @model.reShuffle()
+      @model.reDeal()
       @render()
       return
     @model.on 'push', =>
       alert 'Tie'
-      @model.reShuffle()
+      @model.reDeal()
       @render()
       return
 
