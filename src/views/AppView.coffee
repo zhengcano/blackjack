@@ -13,20 +13,21 @@ class window.AppView extends Backbone.View
     'click .stand-button':  'stand'
 
   initialize: ->
-    @model.on 'playerWin', =>
+    game = @model.get('game')
+    game.on 'playerWin', =>
       @$('.winLose').text("You win!")
       @resetGame()
 
-    @model.on 'dealerWin', =>
+    game.on 'dealerWin', =>
       @$('button').hide()
       @$('.winLose').text("You lose!")
       @resetGame()
 
-    @model.on 'push', =>
+    game.on 'push', =>
       @$('.winLose').text("Tie!")
       @resetGame()
 
-    @model.get('playerHand').on 'stand', =>
+    game.get('playerHand').on 'stand', =>
       @$('button').hide()
 
     @render()
@@ -34,19 +35,20 @@ class window.AppView extends Backbone.View
   render: ->
     @$el.children().detach()
     @$el.html @template()
-    @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
-    @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
+    @$('.player-hand-container').html new HandView(collection: @model.get('game').get 'playerHand').el
+    @$('.dealer-hand-container').html new HandView(collection: @model.get('game').get 'dealerHand').el
 
   hit: ->
-    @model.get('playerHand').hit()
+    @model.get('game').get('playerHand').hit()
 
   stand: ->
-    @model.get('playerHand').stand()
+    @model.get('game').get('playerHand').stand()
 
   resetGame: ->
     view = @
+    game = view.model.get('game')
     setTimeout (->
-      view.model.shuffleDeck()
-      view.model.reDeal()
+      game.shuffleDeck()
+      game.reDeal()
       view.render()
     ), 3000
