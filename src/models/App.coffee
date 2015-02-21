@@ -11,6 +11,10 @@ class window.App extends Backbone.Model
       dealer = @get('dealerHand')
       player = @get('playerHand')
 
+      # on stand, flip dealer's first card
+      dealer.first().flip()
+
+      # continue dealing while score < 17
       while dealer.score() < 17
         dealer.hit()
       if dealer.score() <= 21
@@ -27,4 +31,12 @@ class window.App extends Backbone.Model
     @get('dealerHand').on 'lose', =>
       @trigger 'playerWin', @
 
+  reShuffle: ->
+    deck = @get 'deck'
+    dealer = @get('dealerHand')
+    player = @get('playerHand')
 
+    # If we create a new player/dealer, views won't work
+    # Instead, we empty their hands and deal
+    player.reset().add([deck.pop(), deck.pop()])
+    dealer.reset().add([deck.pop().flip(), deck.pop()])
