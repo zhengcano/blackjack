@@ -5,4 +5,4 @@ class window.AppView extends Backbone.View
     @render()
 
   render: ->
-    @$el.html(@gameView.render())
+    @$el.html([@gameView.render()])

@@ -1,5 +1,6 @@
 class window.GameView extends Backbone.View
   template: _.template '
+    <h1>Blackbeard Jack</h1>
     <div class="winLose"></div>
     <div class="dealer-hand-container hand-container"></div>
     <div class="player-hand-container hand-container"></div>
@@ -11,6 +12,8 @@ class window.GameView extends Backbone.View
   events:
     'click .hit-button':  'hit'
     'click .stand-button':  'stand'
+
+  className: 'gameview'
 
   initialize: ->
     @model.on 'playerWin', =>
