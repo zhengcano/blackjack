@@ -1,9 +1,11 @@
 class window.AppView extends Backbone.View
   template: _.template '
-    <button class="hit-button">Hit</button> <button class="stand-button">Stand</button>
     <div class="winLose"></div>
-    <div class="player-hand-container"></div>
-    <div class="dealer-hand-container"></div>
+    <div class="dealer-hand-container hand-container"></div>
+    <div class="player-hand-container hand-container"></div>
+    <div class="buttons">
+      <button class="hit-button">Hit</button> <button class="stand-button">Stand</button>
+    </div>
   '
 
   events:
@@ -16,12 +18,16 @@ class window.AppView extends Backbone.View
       @resetGame()
 
     @model.on 'dealerWin', =>
+      @$('button').hide()
       @$('.winLose').text("You lose!")
       @resetGame()
 
     @model.on 'push', =>
-      @$('.winLose').text("Tie!");
+      @$('.winLose').text("Tie!")
       @resetGame()
+
+    @model.get('playerHand').on 'stand', =>
+      @$('button').hide()
 
     @render()
 
