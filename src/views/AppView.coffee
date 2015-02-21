@@ -12,24 +12,25 @@ class window.AppView extends Backbone.View
   initialize: ->
     @model.on 'playerWin', =>
       alert 'You win!'
+      @model.shuffleDeck()
       @model.reDeal()
       @render()
-      return
+
     @model.on 'dealerWin', =>
       alert 'You lose!'
+      @model.shuffleDeck()
       @model.reDeal()
       @render()
-      return
+
     @model.on 'push', =>
       alert 'Tie'
+      @model.shuffleDeck()
       @model.reDeal()
       @render()
-      return
 
     @render()
 
   render: ->
-    console.log("here")
     @$el.children().detach()
     @$el.html @template()
     @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el

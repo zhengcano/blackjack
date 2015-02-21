@@ -2,11 +2,11 @@
 # of containing the game logic directly.
 class window.App extends Backbone.Model
   initialize: ->
+    @set 'numDecks', 4
     @set 'deck', deck = new Deck()
     @set 'maxCards', deck.length
     @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
-
     @get('playerHand').on 'stand', =>
 
       dealer = @get('dealerHand')
@@ -43,7 +43,10 @@ class window.App extends Backbone.Model
     player.reset().add([deck.pop(), deck.pop()])
     dealer.reset().add([deck.pop().flip(), deck.pop()])
 
-  shuffle: ->
+  shuffleDeck: ->
     deck = @get 'deck'
+    console.log('working')
     if deck.length < @get('maxCards') * 0.25
-      deck.reset(_.shuffle(deck.createDecks(4)))
+      console.log('shuffled!')
+      deck.reset()
+      deck.createDecks(4)
