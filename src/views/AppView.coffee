@@ -1,6 +1,7 @@
 class window.AppView extends Backbone.View
   template: _.template '
     <button class="hit-button">Hit</button> <button class="stand-button">Stand</button>
+    <div class="winLose"></div>
     <div class="player-hand-container"></div>
     <div class="dealer-hand-container"></div>
   '
@@ -11,22 +12,16 @@ class window.AppView extends Backbone.View
 
   initialize: ->
     @model.on 'playerWin', =>
-      alert 'You win!'
-      @model.shuffleDeck()
-      @model.reDeal()
-      @render()
+      @$('.winLose').text("You win!")
+      @resetGame()
 
     @model.on 'dealerWin', =>
-      alert 'You lose!'
-      @model.shuffleDeck()
-      @model.reDeal()
-      @render()
+      @$('.winLose').text("You lose!")
+      @resetGame()
 
     @model.on 'push', =>
-      alert 'Tie'
-      @model.shuffleDeck()
-      @model.reDeal()
-      @render()
+      @$('.winLose').text("Tie!");
+      @resetGame()
 
     @render()
 
@@ -41,3 +36,11 @@ class window.AppView extends Backbone.View
 
   stand: ->
     @model.get('playerHand').stand()
+
+  resetGame: ->
+    view = @
+    setTimeout (->
+      view.model.shuffleDeck()
+      view.model.reDeal()
+      view.render()
+    ), 3000
