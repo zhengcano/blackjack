@@ -7,6 +7,7 @@ class window.GameView extends Backbone.View
     <div class="buttons">
       <button class="hit-button">Hit</button> <button class="stand-button">Stand</button>
     </div>
+    <div class="feedback"></div>
   '
 
   events:
@@ -31,6 +32,12 @@ class window.GameView extends Backbone.View
 
     @model.get('playerHand').on 'stand', =>
       @$('button').hide()
+
+    @model.on 'right', =>
+      @$('.feedback').text("Ye be right!")
+
+    @model.on 'wrong', =>
+      @$('.feedback').text("To the plank with ye!")
 
     @render()
 

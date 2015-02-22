@@ -6,10 +6,18 @@ class window.Game extends Backbone.Model
     @set 'maxCards', deck.length
     @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
+
+    @get('playerHand').on 'hit', =>
+      if @checkStrategy() is 'stand' then @trigger 'wrong', @
+      else @trigger 'right', @
+
     @get('playerHand').on 'stand', =>
 
       dealer = @get('dealerHand')
       player = @get('playerHand')
+
+      if @checkStrategy() is 'hit' then @trigger 'wrong', @
+      else @trigger 'right', @
 
       # on stand, flip dealer's first card
       dealer.first().flip()
@@ -47,3 +55,13 @@ class window.Game extends Backbone.Model
     if deck.length < @get('maxCards') * 0.25
       deck.reset()
       deck.createDecks(4)
+
+  checkStrategy: ->
+    dealer = @get('dealerHand')
+    player = @get('playerHand')
+
+    if player.score() < 12 then bestMove = 'hit'
+    else if player.score() is 12 and (dealer.score() is 2 or dealer.score() is 3) then bestMove = 'hit'
+    else if player.score() < 17 and (dealer.score() > 6 or dealer.score is 1) then bestMove = 'hit'
+    else bestMove = 'stand'
+    return bestMove
